@@ -1,0 +1,511 @@
+android中的动画:
+https://blog.csdn.net/xiaohao0724/article/details/54582965
+https://github.com/search?l=Java&q=android%E5%B8%A7%E5%8A%A8%E7%94%BB&type=Repositories
+https://github.com/REBOOTERS/AndroidAnimationExercise
+https://github.com/Havorld/FrameAnimation
+https://blog.csdn.net/xiaohao0724/article/details/54582965
+帧动画:
+补间动画:
+属性动画:
+
+Android中的动画,大概分为三种:
+
+1、逐帧动画(FrameAnimation)
+
+2、补间动画(TweenAnimation)
+
+3、属性动画(PropertyAnimation)
+
+帧动画的实现方式有两种：
+
+一、在res/drawable文件夹下新建animation-list的XML实现帧动画
+
+1、首先在res/drawable文件夹下添加img00-img24共25张图片
+
+2、新建frame_anim.xml
+
+
+[html] view plain copy
+<?xml version="1.0" encoding="utf-8"?>  
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:oneshot="true" >  
+  
+    <!-- animation-list 帧动画 -->  
+    <!-- android:oneshot的值为 false代表播放多次，true代表只播放一次 -->  
+    <!-- duration代表每张图片的播放时间 ,定义一个持续时间为50毫秒的动画帧 -->  
+    <item  
+        android:drawable="@drawable/img00"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img01"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img02"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img03"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img04"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img05"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img06"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img07"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img08"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img09"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img10"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img11"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img12"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img13"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img14"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img15"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img16"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img17"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img18"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img19"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img20"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img21"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img22"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img23"  
+        android:duration="50"/>  
+    <item  
+        android:drawable="@drawable/img24"  
+        android:duration="50"/>  
+  
+</animation-list>  
+
+3、在activity_main中添加控件
+
+[html] view plain copy
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    xmlns:tools="http://schemas.android.com/tools"  
+    android:layout_width="match_parent"  
+    android:layout_height="match_parent"  
+    tools:context="com.havorld.frameanimation.MainActivity" >  
+  
+    <ImageView  
+        android:id="@+id/imageView"  
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content"  
+        android:layout_centerInParent="true" />  
+    <!-- android:background="@drawable/frame_anim" -->  
+  
+    <LinearLayout  
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"  
+        android:layout_alignParentBottom="true"  
+        android:orientation="horizontal"  
+        android:padding="10dp" >  
+  
+        <Button  
+            android:id="@+id/start"  
+            android:layout_width="0dp"  
+            android:layout_height="wrap_content"  
+            android:layout_weight="1"  
+            android:text="播放" />  
+  
+        <Button  
+            android:id="@+id/stop"  
+            android:layout_width="0dp"  
+            android:layout_height="wrap_content"  
+            android:layout_weight="1"  
+            android:text="停止" />  
+    </LinearLayout>  
+  
+</RelativeLayout>  
+
+4、在代码中获取并开启帧动画
+
+[java] view plain copy
+public class MainActivity extends Activity implements OnClickListener {  
+  
+    private ImageView imageView;  
+    private AnimationDrawable animationDrawable;  
+  
+    @Override  
+    protected void onCreate(Bundle savedInstanceState) {  
+        super.onCreate(savedInstanceState);  
+        setContentView(R.layout.activity_main);  
+  
+        imageView = (ImageView) findViewById(R.id.imageView);  
+        findViewById(R.id.start).setOnClickListener(this);  
+        findViewById(R.id.stop).setOnClickListener(this);  
+  
+        setXml2FrameAnim1();  
+        // setXml2FrameAnim2();  
+  
+    }  
+  
+    /** 
+     * 通过XML添加帧动画方法一 
+     */  
+    private void setXml2FrameAnim1() {  
+  
+        // 把动画资源设置为imageView的背景,也可直接在XML里面设置  
+        imageView.setBackgroundResource(R.drawable.frame_anim);  
+        animationDrawable = (AnimationDrawable) imageView.getBackground();  
+    }  
+  
+    /** 
+     * 通过XML添加帧动画方法二 
+     */  
+    private void setXml2FrameAnim2() {  
+  
+        // 通过逐帧动画的资源文件获得AnimationDrawable示例  
+        animationDrawable = (AnimationDrawable) getResources().getDrawable(  
+                R.drawable.frame_anim);  
+        imageView.setBackground(animationDrawable);  
+    }  
+   
+    @Override  
+    public void onClick(View v) {  
+  
+        switch (v.getId()) {  
+        case R.id.start:  
+            if (animationDrawable != null && !animationDrawable.isRunning()) {  
+                animationDrawable.start();  
+            }  
+            break;  
+        case R.id.stop:  
+            if (animationDrawable != null && animationDrawable.isRunning()) {  
+                animationDrawable.stop();  
+            }  
+            break;  
+  
+        default:  
+            break;  
+        }  
+    }  
+  
+}  
+
+二、通过代码实现帧动画
+
+[java] view plain copy
+/** 
+ * 通过代码添加帧动画方法 
+ */  
+private void setSrc2FrameAnim() {  
+  
+    animationDrawable = new AnimationDrawable();  
+    // 为AnimationDrawable添加动画帧  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img00), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img01), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img02), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img03), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img04), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img05), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img06), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img07), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img08), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img09), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img10), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img11), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img12), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img13), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img14), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img15), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img16), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img17), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img18), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img19), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img20), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img21), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img22), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img23), 50);  
+    animationDrawable.addFrame(  
+            getResources().getDrawable(R.drawable.img24), 50);  
+    // 设置为循环播放  
+    animationDrawable.setOneShot(false);  
+    imageView.setBackground(animationDrawable);  
+
+
+
+
+重启模拟器的命令.
+nox_adb.exe connect 127.0.0.1:62001
+
+# 补间动画
+旋转动画
+平移动画
+透明动画
+缩放动画
+混合型同时释放
+可以让动画按照一定的次序释放
+
+https://www.cnblogs.com/whoislcj/p/5730520.html
+
+
+渐变透明度动画效果	<alpha/>	AlphaAnimation
+渐变尺寸缩放动画效果	<scale/>	ScaleAnimation
+画面旋转动画效果	<rotate/>	RotateAnimation
+画面位置移动动画效果	<translate/>	TranslateAnimation
+组合动画效果	<set/>	AnimationSet
+
+
+01.xml文件存放目录:anim
+具体如何实现：
+1.）alpha渐变透明度动画效果
+ xml方式：
+
+<?xml version="1.0" encoding="utf-8"?>
+<alpha xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fillAfter="false"
+    android:fromAlpha="1.0"
+    android:toAlpha="0.0" />
+fromAlpha:开始时透明度
+toAlpha： 结束时透明度
+duration：动画持续时间
+fillAfter：设置动画结束后保持当前的位置
+
+XML方式加载方式通过AnimationUtils.loadAnimation(this, R.anim.anim_alpha)获取Animation
+
+  Animation alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+  imageView.startAnimation(alphaAnimation);
+Java代码方式：
+
+  Animation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+  alphaAnimation.setDuration(500);//设置动画持续时间为500毫秒
+  alphaAnimation.setFillAfter(false);//设置动画结束后保持当前的位置（即不返回到动画开始前的位置）
+  imageView.startAnimation(alphaAnimation);
+2.）scale渐变尺寸缩放动画效果
+ xml方式：
+
+复制代码
+<?xml version="1.0" encoding="utf-8"?>
+<scale xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fromXScale="0.0"
+    android:fromYScale="0.0"
+    android:interpolator="@android:anim/decelerate_interpolator"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:repeatCount="1"
+    android:repeatMode="reverse"
+    android:startOffset="0"
+    android:toXScale="1.5"
+    android:toYScale="1.5" />
+复制代码
+fromXDelta,fromYDelta 起始时X，Y座标,屏幕右下角的座标是X:320,Y:480
+toXDelta， toYDelta 动画结束时X,Y的座标 
+interpolator 指定动画插入器
+fromXScale,fromYScale， 动画开始前X,Y的缩放，0.0为不显示， 1.0为正常大小
+toXScale，toYScale， 动画最终缩放的倍数， 1.0为正常大小，大于1.0放大
+pivotX， pivotY 动画起始位置，相对于屏幕的百分比,两个都为50%表示动画从自身中间开始
+startOffset， 动画多次执行的间隔时间，如果只执行一次，执行前会暂停这段时间，单位毫秒 
+duration，一次动画效果消耗的时间，单位毫秒，值越小动画速度越快 
+repeatCount，动画重复的计数，动画将会执行该值+1次
+repeatMode，动画重复的模式，reverse为反向，当第偶次执行时，动画方向会相反。restart为重新执行，方向不变
+
+Java方式：
+
+复制代码
+ Animation scaleAnimation = new ScaleAnimation(0.0f, 1.5f, 0.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+    scaleAnimation.setDuration(500);//设置动画持续时间为500毫秒
+    scaleAnimation.setFillAfter(true);//如果fillAfter的值为true,则动画执行后，控件将停留在执行结束的状态
+    scaleAnimation.setFillBefore(false);//如果fillBefore的值为true，则动画执行后，控件将回到动画执行之前的状态
+    scaleAnimation.setRepeatCount(3);//设置动画循环次数
+    scaleAnimation.setRepeatMode(Animation.REVERSE);
+    scaleAnimation.setStartOffset(0);
+    scaleAnimation.setInterpolator(this, android.R.anim.decelerate_interpolator);//设置动画插入器
+    imageView.startAnimation(scaleAnimation);
+复制代码
+3.）rotate画面旋转动画效果
+xml方式：
+
+复制代码
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fromDegrees="0"
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:toDegrees="-360" />
+复制代码
+fromDegrees 动画开始时的角度
+toDegrees 动画结束时物件的旋转角度,正代表顺时针
+pivotX 属性为动画相对于物件的X坐标的开始位置
+pivotY 属性为动画相对于物件的Y坐标的开始位置
+
+Java方式：
+
+Animation rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+rotateAnimation.setDuration(500);
+rotateAnimation.setFillAfter(true);
+rotateAnimation.setInterpolator(this, android.R.anim.accelerate_decelerate_interpolator);//设置动画插入器
+imageView.startAnimation(rotateAnimation);
+4.）translate画面位置移动动画效果
+xml方式：
+
+复制代码
+<?xml version="1.0" encoding="utf-8"?>
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:fromXDelta="100"
+    android:fromYDelta="0"
+    android:interpolator="@android:anim/cycle_interpolator"
+    android:toXDelta="0"
+    android:toYDelta="0" />
+复制代码
+fromXDelta,fromYDelta 起始时X，Y座标,屏幕右下角的座标是X:320,Y:480
+toXDelta， toYDelta 动画结束时X,Y的座标
+
+Java方式：
+
+Animation translateAnimation = new TranslateAnimation(0, 100, 0, 0);
+translateAnimation.setDuration(500);
+translateAnimation.setInterpolator(this, android.R.anim.cycle_interpolator);//设置动画插入器
+translateAnimation.setFillAfter(true);//设置动画结束后保持当前的位置（即不返回到动画开始前的位置）
+imageView.startAnimation(translateAnimation);
+5.）set组合动画效果
+xml方式：
+
+复制代码
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <alpha
+        android:duration="500"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0" />
+
+    <scale
+        android:duration="500"
+        android:fromXScale="0.0"
+        android:fromYScale="0.0"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:startOffset="0"
+        android:toXScale="1.5"
+        android:toYScale="1.5" />
+</set>
+复制代码
+如何使用
+
+   AnimationSet animationSet = (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.anim_set);
+   imageView.startAnimation(animationSet);
+Java方式
+
+
+AnimationSet animationSet = new AnimationSet(true);
+
+Animation alphaAnimation = new AlphaAnimation(1.0f, 0.1f);
+alphaAnimation.setDuration(500);//设置动画持续时间为500毫秒
+
+Animation scaleAnimation = new ScaleAnimation(0.0f, 1.5f, 0.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+scaleAnimation.setDuration(500);//设置动画持续时间为500毫秒
+scaleAnimation.setRepeatMode(Animation.REVERSE);
+scaleAnimation.setStartOffset(0);
+scaleAnimation.setInterpolator(this, android.R.anim.decelerate_interpolator);//设置动画插入器
+
+animationSet.addAnimation(alphaAnimation);
+animationSet.addAnimation(scaleAnimation);
+
+imageView.startAnimation(animationSet);
+复制代码
+动画监听器Animation.AnimationListener：
+ 有时可能我们要在动画的每个周期里面做不同的操作，这时候就要借助动画监听器了
+
+复制代码
+  alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+    @Override
+    public void onAnimationStart(Animation animation) {
+        //动画开始时调用
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        //动画结束时调用
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+        //动画重复时调用
+    }
+    });
+复制代码
+ 
+
+几种自带的动画插入器
+AccelerateInterpolator 加速，开始时慢中间加速
+
+DecelerateInterpolator 减速，开始时快然后减速
+
+AccelerateDecelerateInterolator 先加速后减速，开始结束时慢，中间加速
+
+AnticipateInterpolator 反向，先向相反方向改变一段再加速播放
+
+AnticipateOvershootInterpolator 反向加超越，先向相反方向改变，再加速播放，会超出目的值然后缓慢移动至目的值
+
+BounceInterpolator 跳跃，快到目的值时值会跳跃，如目的值100，后面的值可能依次为85，77，70，80，90，100
+
+CycleIinterpolator 循环，动画循环一定次数，值的改变为一正弦函数：Math.sin(2* mCycles* Math.PI* input)
+
+LinearInterpolator 线性，线性均匀改变
+
+OvershootInterpolator超越，最后超出目的值然后缓慢改变到目的值
